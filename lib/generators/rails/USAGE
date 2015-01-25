@@ -1,0 +1,25 @@
+Description:
+
+  Generate Resource Controller
+
+Example:
+
+    rails g resource_controller country
+
+    This will create:
+        create    app/controllers/countries_controller.rb
+        create    app/views/countries
+        create    app/views/countries/index.html.erb
+        create    app/views/countries/edit.html.erb
+        create    app/views/countries/show.html.erb
+        create    app/views/countries/new.html.erb
+        create    app/views/countries/_form.html.erb
+        create    test/functional/countries_controller_test.rb
+        create    app/helpers/countries_helper.rb
+        create    test/unit/helpers/countries_helper_test.rb
+
+    and inside of the controller it will call resource_for
+
+    class CountriesController < ApplicationController
+      resource_for :"Country"
+    end

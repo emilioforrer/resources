@@ -1,0 +1,10 @@
+Description:
+
+  Configuration Initializer
+
+Example:
+
+    rails g resources:install
+
+    This will create:
+        config/initializers/resources.rb
