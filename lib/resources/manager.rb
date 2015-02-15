@@ -73,7 +73,7 @@ module Resources
     end
     
     def build_resource
-      resource_class.new(params_resource)
+      resource_class.new()
     end
 
     

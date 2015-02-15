@@ -207,6 +207,44 @@ end
   = f.search_field :name_cont 
   = f.submit 
 ```
+#### **Overriding methods **
+
+##### **Redirects **
+
+By default, after any of the REST actions that modify the record  (create, update, destroy) **it redirects to the index action** of that controller, but if you define method  **`after_#{action_name}_path_for`**  that returns  a path **it will execute this method and redirect** to that particular path.
+
+**Example**
+
+```
+  def after_create_path_for
+    root_url
+  end
+
+```   
+**NOTE:** After creating the record it will redirect to the **root_url**
+
+##### **default REST actions**
+
+If you want to override any of the REST actions, to add any extra logic that you may need, you can just pass a block to the **`save_resource`** or **`destroy_resource`** inside the actions and add your custom logic there.
+
+**Example**
+
+```
+  def create
+    save_resource do
+      # Add you complex logic here
+      if resource_saved?
+        flash[:notice] = I18n.t("app.record_successfully_created")
+        redirect_to root_url and return
+      else
+        render action: :new
+      end
+    end
+  end
+
+```   
+
+**NOTE:** Remember that you can make use of the  **`resource_saved?`** method to know if the record has been saved
 
 #### **GLOBAL CONFIGURATION **
 
@@ -226,5 +264,6 @@ end
 ## **Copyright**
 
 Copyright (c) 2015 Emilio Forrer. See LICENSE.txt for further details.
+
 
 
