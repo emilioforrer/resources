@@ -2,7 +2,7 @@
 Resources.config do |config|
 
   config.rest_actions = true # Enable restful actions (index,new, create, etc)
-  config.search = false # Enable ransack search object (resources_search) 
+  config.search = false # Enable ransack search object (resources_search)
   config.search_options =  {distinct: false} # ransack result options. Default {distinct: false}
 
   # Setting Params (params_search, params_resource, etc)
@@ -23,8 +23,8 @@ Resources.config do |config|
 
   # Setting alias method of resource, if you change the value to, for example :country you will gain this extra helper methods:
   # countries for the collection object
-  # country for the resource object 
+  # country for the resource object
   # country_saved? to know if the resource was saved
   config.resource_method_name =  :resource # alias method of resource
-  config.resources_method_name =  nil # alias method of resources, if you dont specify one it takes "resource_method_name.to_s.pluralize" 
+  config.resources_method_name =  :resources # alias method of resources, if you dont specify one it takes "resource_method_name.to_s.pluralize" 
 end
