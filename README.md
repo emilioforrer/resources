@@ -34,12 +34,12 @@ Rub the configuration generator, this will create the **resources initializer**
 ```
 rails g resources:install
 ```
- 
+
  ----------
 
 USAGE
 -------------
- 
+
  Just add `resource_for` to your controller and give the model's name
 
 ```
@@ -60,7 +60,7 @@ And that's it, you have to do anything else on the controller to create a **CRUD
 
 **`resources`:** this will have a collection of `Country`, objects so you can use on the `index` actions or any other collection route actions of your controller
 
-**`resource`:** this will have a  `Country`, object so you can use on the member route actions like  `new, create, edit, update, show, destroy` 
+**`resource`:** this will have a  `Country`, object so you can use on the member route actions like  `new, create, edit, update, show, destroy`
 
 **`resources_search`:**  this is a **[ransack](https://github.com/activerecord-hackery/ransack)** object to you in the `search_form_for` helper
 
@@ -84,23 +84,46 @@ And that's it, you have to do anything else on the controller to create a **CRUD
 
 
 
-#### **RESOURCE PARAMS -  `params_resource`** 
+#### **RESOURCE PARAMS -  `params_resource`**
 
-This options allows you to change the default params key used for create or update the record. So you have to add the `as: :resource` to the `simple_form_for`
+This options allows you to change the default params key used for create or update the record. So you don't have to add the `as: :resource` to the `simple_form_for`.
 
 ```
 class Admin::CountriesController < ApplicationController
-  resource_for :"Country", 
-    params_resource: :country 
+  resource_for :"Country",
+    params_resource: :country
+end
+
+# For rails 4
+
+class Admin::CountriesController < ApplicationController
+  resource_for :"Country",
+    params_resource: :country_params
+
+  private
+
+  def country_params
+    params.require(:country).permit(:name)
+  end
 end
 ```
+**Note:** For Rails 4 the `params_resource: :country` as symbol it will call a method on the controller instead the key of the params hash `params[:country]`
 
 Or you can use the  `lambda` syntax.
 
 ```
 class Admin::CountriesController < ApplicationController
-  resource_for :"Country", 
-    params_resource: lambda{ |params|   params[:country] } 
+  resource_for :"Country",
+    params_resource: lambda{ |params|   params[:country] }
+end
+
+# For rails 4
+
+class Admin::CountriesController < ApplicationController
+  resource_for :"Country",
+    params_resource: lambda{ |params|
+      params.require(:country).permit(:name)
+    }
 end
 ```
 
@@ -110,12 +133,12 @@ This options allows you to alias the `resource` method in case you don't like th
 
 ```
 class Admin::CountriesController < ApplicationController
-  resource_for :"Country", 
+  resource_for :"Country",
     params_resource: :country,
-    resource_method_name: :country 
+    resource_method_name: :country
 end
 ```
-**NOTE:** making a change in `resource_method_name` and `resources_method_name` options requires a **server restart**. 
+**NOTE:** making a change in `resource_method_name` and `resources_method_name` options requires a **server restart**.
 
 Now in your view you can use `country` instead of `resource`
 
@@ -134,10 +157,10 @@ This option enable pagination in case that you use any of the most popular pagin
 
 ```
 class Admin::CountriesController < ApplicationController
-  resource_for :"Country", 
-    pagination: true, 
+  resource_for :"Country",
+    pagination: true,
     params_resource: :country,
-    resource_method_name: :country 
+    resource_method_name: :country
 end
 ```
 
@@ -145,10 +168,10 @@ Or you can use the  `lambda` syntax.
 
 ```
 class Admin::CountriesController < ApplicationController
-  resource_for :"Country", 
-    pagination: lambda{ |params, controller| params[:disable_pagination].blank? }, 
+  resource_for :"Country",
+    pagination: lambda{ |params, controller| params[:disable_pagination].blank? },
     params_resource: :country,
-    resource_method_name: :country 
+    resource_method_name: :country
 end
 ```
 
@@ -159,11 +182,11 @@ This options are to set a default `scope` for the `resources`, and `resource` ob
 
 ```
 class Admin::CountriesController < ApplicationController
-  resource_for :"Country", 
+  resource_for :"Country",
     resources_scope: :active,
-    pagination: true, 
+    pagination: true,
     params_resource: :country,
-    resource_method_name: :country 
+    resource_method_name: :country
 end
 ```
 **Note:** this will execute the scope `active` and get you only the countries that are currently actives.
@@ -172,13 +195,13 @@ You can use the  `lambda` syntax for a **more complex scope**.
 
 ```
 class Admin::CountriesController < ApplicationController
-  resource_for :"Country", 
+  resource_for :"Country",
     resources_scope: lambda{ |scope, params, controller|
       scope.by_active_state(params[:active_state]).includes(:cities)
     },
-    pagination: true, 
+    pagination: true,
     params_resource: :country,
-    resource_method_name: :country 
+    resource_method_name: :country
 end
 ```
 
@@ -191,21 +214,21 @@ The `search` option enable [ransack](https://github.com/activerecord-hackery/ran
 ```
 class Admin::CountriesController < ApplicationController
   resource_for :"Country",
-    search: true, 
-    search_options: {distinct: true}, 
+    search: true,
+    search_options: {distinct: true},
     resources_scope: :active,
-    pagination: true, 
+    pagination: true,
     params_resource: :country,
-    resource_method_name: :country 
+    resource_method_name: :country
 end
 ```
 **NOTE:** For the use of the** `search_form_for`** you have the `resources_search` helper that is a racksack object or in this case `countries_search` because we used the resource alias `resource_method_name`
 
 ```
 = search_form_for [:admin, countries_search] do |f|
-  = f.label :name_cont 
-  = f.search_field :name_cont 
-  = f.submit 
+  = f.label :name_cont
+  = f.search_field :name_cont
+  = f.submit
 ```
 #### **Overriding methods **
 
@@ -220,7 +243,7 @@ By default, after any of the REST actions that modify the record  (create, updat
     root_url
   end
 
-```   
+```
 **NOTE:** After creating the record it will redirect to the **root_url**
 
 ##### **default REST actions**
@@ -242,13 +265,13 @@ If you want to override any of the REST actions, to add any extra logic that you
     end
   end
 
-```   
+```
 
 **NOTE:** Remember that you can make use of the  **`resource_saved?`** method to know if the record has been saved
 
 #### **GLOBAL CONFIGURATION **
 
-You can change the default parameters of any configuration by change the options in the `config/initializers/resources.rb` that was generated by running `rails g resources:install` 
+You can change the default parameters of any configuration by change the options in the `config/initializers/resources.rb` that was generated by running `rails g resources:install`
 
 ```
 Resources.config do |config|
@@ -264,6 +287,3 @@ end
 ## **Copyright**
 
 Copyright (c) 2015 Emilio Forrer. See LICENSE.txt for further details.
-
-
-

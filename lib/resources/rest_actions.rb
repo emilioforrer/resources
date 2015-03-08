@@ -1,7 +1,7 @@
 module Resources
   module RestActions
     extend ActiveSupport::Concern
-          
+
       included do
         respond_to :html, :js, :json
         helper_method :resource_saved?
@@ -16,25 +16,25 @@ module Resources
       end
 
       def index
-            
+
       end
 
       def new
-        
+
       end
 
       def create
-        save_resource 
+        save_resource
       end
 
       def edit
-        
+
       end
 
       def update
-        save_resource 
+        save_resource
       end
-          
+
       def destroy
         destroy_resource
       end
@@ -46,10 +46,10 @@ module Resources
       end
 
       def save_resource &block
-        resource.attributes = resource_manager.params_resource unless resource.new_record?
+        resource.assign_attributes(resource_manager.params_resource)
         @resource_saved = resource.save
         after_redirect_for = "after_#{action_name}_path_for"
-        action_path_for = 
+        action_path_for =
           case action_name
           when "create"
             :new
@@ -59,7 +59,7 @@ module Resources
             :index
           end
         if block_given?
-          block.call(resource) 
+          block.call(resource)
         else
           if self.respond_to?(after_redirect_for, true)
             respond_with resource, location: send(after_redirect_for)
@@ -73,7 +73,7 @@ module Resources
         @destroy_resource = resource.destroy
         after_redirect_for = "after_#{action_name}_path_for"
         if block_given?
-          block.call(@destroy_resource) 
+          block.call(@destroy_resource)
         else
           if self.respond_to?(after_redirect_for, true)
             respond_with resource, location: send(after_redirect_for), action: :destroy

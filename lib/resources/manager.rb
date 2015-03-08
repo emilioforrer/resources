@@ -14,21 +14,21 @@ module Resources
 
     def resources_scope
       scope = option_with_scope(:resources_scope)
-      @resources_scope = 
-        case 
+      @resources_scope =
+        case
         when pagination?
           scope = scope.page(params_page) if scope.respond_to?(:page)
           scope = scope.paginate(page: params_page) if scope.respond_to?(:paginate)
           scope
         else
-          scope  
+          scope
         end
     end
 
     def pagination?
       settings.pagination.is_a?(Proc) ? settings.pagination.call(params, controller) : settings.pagination
     end
-    
+
     def resource_scope
       @resource_scope = option_with_scope(:resource_scope)
     end
@@ -38,11 +38,11 @@ module Resources
     end
 
 
-    def resources 
+    def resources
       @resources ||= settings.search ? resources_search.result(settings.search_options) : resources_scope
     end
 
-    def resource 
+    def resource
       @resource ||=
         case controller.action_name
         when "new", "create"
@@ -57,7 +57,7 @@ module Resources
     end
 
     def params
-      request.params
+      controller.params
     end
 
     def params_search
@@ -71,17 +71,17 @@ module Resources
     def params_resource
       @params_resource ||= option_with_params(:params_resource)
     end
-    
+
     def build_resource
       resource_class.new()
     end
 
-    
+
 
     private
 
 
-    def option_with_scope name 
+    def option_with_scope name
       scope = Rails::VERSION::MAJOR >= 4 ? resource_class.all : resource_class.scoped
       if settings.send(name)
         settings.send(name).is_a?(Proc) ? settings.send(name).call(scope,params,controller) : scope.send(settings.send(name))
@@ -90,8 +90,16 @@ module Resources
       end
     end
 
-    def option_with_params name 
-      settings.send(name).is_a?(Proc) ? settings.send(name).call(params) : params[settings.send(name)]
+    def option_with_params name
+      if settings.send(name).is_a?(Proc)
+        settings.send(name).call(params)
+      else
+        if Rails::VERSION::MAJOR >= 4
+          controller.send(name)
+        else
+          params[settings.send(name)]
+        end
+      end
     end
 
     def controller
@@ -102,7 +110,7 @@ module Resources
       @request
     end
 
-    
+
 
 
   end
