@@ -5,7 +5,7 @@ module Resources
     def initialize controller, request, *args
       @controller = controller
       @request = request
-      @settings = @controller.class.resource_configuration
+      @settings = grape? ? @controller.resource_configuration : @controller.class.resource_configuration
     end
 
     def resource_class
@@ -23,6 +23,10 @@ module Resources
         else
           scope
         end
+    end
+
+    def grape?
+      defined?(Grape) && !(controller.class < ActionController::Base)
     end
 
     def pagination?
@@ -43,13 +47,17 @@ module Resources
     end
 
     def resource
-      @resource ||=
-        case controller.action_name
-        when "new", "create"
-          build_resource
-        else
-          resource_scope.where("#{resource_class.table_name}.id = ?",params[:id]).first rescue nil
-        end
+      if grape?
+        @resource ||= params[:id].blank? ? build_resource : (resource_scope.where("#{resource_class.table_name}.id = ?",params[:id]).first rescue nil )
+      else
+        @resource ||=
+          case controller.action_name
+          when "new", "create"
+            build_resource
+          else
+            resource_scope.where("#{resource_class.table_name}.id = ?",params[:id]).first rescue nil
+          end
+      end
     end
 
     def settings
@@ -57,7 +65,7 @@ module Resources
     end
 
     def params
-      controller.params
+      grape? ? request.params : controller.params
     end
 
     def params_search
@@ -90,16 +98,28 @@ module Resources
       end
     end
 
+    def forbidden_params_names
+      [settings.resource_method_name, settings.resources_method_name, :resource, :resources]
+    end
+
+    def forbidden_params_names? name
+      forbidden_params_names.map(&:to_s).include?(settings.send(name).to_s)
+    end
+
     def option_with_params name
+      result = {}
       if settings.send(name).is_a?(Proc)
-        settings.send(name).call(params)
+        result = settings.send(name).call(params)
       else
-        if Rails::VERSION::MAJOR >= 4
-          controller.send(name)
+        if Rails::VERSION::MAJOR >= 4 && !forbidden_params_names?(name)
+          value = controller.send(name) rescue nil
+          result = value ? value : params[settings.send(name)]
         else
-          params[settings.send(name)]
+          result = params[settings.send(name)]
         end
       end
+      result = result && result.is_a?(Hash) ? result :  {}
+      result
     end
 
     def controller

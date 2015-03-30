@@ -31,6 +31,9 @@ module Resources
 
       end
 
+      def show
+      end
+
       def update
         save_resource
       end
