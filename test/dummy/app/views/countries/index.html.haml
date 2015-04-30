@@ -1,0 +1,21 @@
+= search_form_for resources_search do |f|
+  = f.label :name_cont
+  = f.search_field :name_cont
+  = f.submit
+%p
+  = link_to "New", new_country_path
+%table
+  %tbody
+    - resources.each do |resource|
+      %tr
+        %td
+          = resource.code
+        %td
+          = resource.name
+        %td
+          = resource.active
+        %td
+          = link_to "edit", edit_country_path(resource)
+          = link_to "delete", country_path(resource), method: :delete
+
+= paginate resources

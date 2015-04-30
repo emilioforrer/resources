@@ -1,0 +1,19 @@
+= search_form_for [:admin, countries_search] do |f|
+  = f.label :name_cont
+  = f.search_field :name_cont
+  = f.submit
+%p
+  = link_to "New", new_admin_country_path
+%table
+  %tbody
+    - countries.each do |resource|
+      %tr
+        %td
+          = resource.code
+        %td
+          = resource.name
+        %td
+          = link_to "edit", edit_admin_country_path(resource)
+          = link_to "delete", admin_country_path(resource), method: :delete
+
+= paginate resources

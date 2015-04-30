@@ -1,0 +1,6 @@
+= resource_saved? ? "true" : "false"
+= simple_form_for resource, as: :resource do |f|
+  = f.input :code
+  = f.input :name
+  = f.input :active
+  = f.submit "SAVE"

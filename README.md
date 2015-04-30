@@ -3,6 +3,8 @@
 
 It's a gem that help's you to create **CRUD** controllers for your models in a **very fast** and **flexible** way.
 
+**Note:** Version 1.0.0+ introduces some breaking changes, to see the list of this change please check [CHANGE_LOG.md](https://github.com/emilioforrer/resources/blob/master/CHANGELOG.md)
+
 ----------
 
 
@@ -35,7 +37,7 @@ Rub the configuration generator, this will create the **resources initializer**
 rails g resources:install
 ```
 
- ----------
+----------
 
 USAGE
 -------------
@@ -93,21 +95,20 @@ class Admin::CountriesController < ApplicationController
   resource_for :"Country",
     params_resource: :country
 end
+```
 
-# For rails 4
+**Note:** For **Rails 4** you may encounter with this error (ActiveModel::ForbiddenAttributesError)  when you try to update a record  due to **`strong_parameters`** protection. To avoid this just add to your model a method named `permited_attributes` that return an array of allowed attributes. Example
 
-class Admin::CountriesController < ApplicationController
-  resource_for :"Country",
-    params_resource: :country_params
+```
+class Country < ActiveRecord::Base
 
-  private
-
-  def country_params
-    params.require(:country).permit(:name)
+  def permited_attributes
+    [:name, :code, :active]
   end
+
 end
 ```
-**Note:** For Rails 4 the `params_resource: :country` as symbol it will call a method on the controller instead the key of the params hash `params[:country]`
+
 
 Or you can use the  `lambda` syntax.
 

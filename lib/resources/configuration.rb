@@ -1,6 +1,11 @@
 module Resources
   class Configuration
 
+    def self.accessors
+      [:rest_actions, :search, :search_options, :params_search, :resource_class_name, :resource_scope, :resources_scope, :resource_method_name, :resources_method_name, :params_resource, :pagination, :params_page]
+    end
+    accessors.map{|a| attr_accessor a }
+
     def initialize *args
       options = args.extract_options!
       self.rest_actions = options[:rest_actions] || true
@@ -13,8 +18,8 @@ module Resources
       self.resource_scope = options[:resource_scope] || nil
       self.resources_scope = options[:resources_scope] || nil
       self.resource_method_name = options[:resource_method_name] || :resource
-      self.resources_method_name = options[:resources_method_name] || nil
-      if self.resource_method_name && self.resources_method_name.to_s.blank?
+      self.resources_method_name = options[:resources_method_name] || :resources
+      if self.resource_method_name.to_s != "resource" && options[:resources_method_name].to_s == "resources"
         self.resources_method_name = self.resource_method_name.to_s.pluralize
       end
     end
@@ -28,10 +33,7 @@ module Resources
       hash
     end
 
-    def self.accessors
-      [:rest_actions, :search, :search_options, :params_search, :resource_class_name, :resource_scope, :resources_scope, :resource_method_name, :resources_method_name, :params_resource, :pagination, :params_page]
-    end
-    accessors.map{|a| attr_accessor a }
+
 
 
   end

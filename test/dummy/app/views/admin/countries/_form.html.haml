@@ -1,0 +1,6 @@
+= country_saved? ? "true" : "false"
+= simple_form_for [:admin, country] do |f|
+  = f.input :code
+  = f.input :name
+  = f.input :active
+  = f.submit "SAVE"

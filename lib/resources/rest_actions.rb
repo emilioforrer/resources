@@ -4,13 +4,15 @@ module Resources
 
       included do
         respond_to :html, :js, :json
-        helper_method :resource_saved?
+        helper_method :resource_saved?, :resources_search
         if self.resource_configuration.resource_method_name
           self.class_eval <<-RUBY
             alias_method :save_#{self.resource_configuration.resource_method_name.to_s}, :save_resource
+            alias_method :#{self.resource_configuration.resources_method_name.to_s}_search, :resources_search
             alias_method :destroy_#{self.resource_configuration.resource_method_name.to_s}, :destroy_resource
             alias_method :#{self.resource_configuration.resource_method_name.to_s}_saved?, :resource_saved?
             helper_method :#{self.resource_configuration.resource_method_name.to_s}_saved?
+            helper_method :#{self.resource_configuration.resource_method_name.to_s}_search
           RUBY
         end
       end

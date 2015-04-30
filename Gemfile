@@ -12,3 +12,12 @@ gemspec
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
+
+
+gem "haml"
+gem "simple_form"
+gem 'kaminari'
+gem "ransack"
+gem "squeel"
+gem 'sqlite3'
+gem 'responders', '~> 2.0'

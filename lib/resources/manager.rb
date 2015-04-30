@@ -38,7 +38,7 @@ module Resources
     end
 
     def resources_search
-      @resources_search ||= resources_scope.search(params_search) rescue nil
+      @resources_search ||= resources_scope.search(params_search) if resources_scope.respond_to?(:search)
     end
 
 
@@ -90,6 +90,7 @@ module Resources
 
 
     def option_with_scope name
+      raise ArgumentError.new("The class '#{settings.resource_class_name}' does not exists. Please specify a valid model") if resource_class.nil?
       scope = Rails::VERSION::MAJOR >= 4 ? resource_class.all : resource_class.scoped
       if settings.send(name)
         settings.send(name).is_a?(Proc) ? settings.send(name).call(scope,params,controller) : scope.send(settings.send(name))
@@ -106,19 +107,27 @@ module Resources
       forbidden_params_names.map(&:to_s).include?(settings.send(name).to_s)
     end
 
+    def resource_allow_permit?
+      resource.respond_to?(:permited_attributes) && resource.permited_attributes.is_a?(Array)
+    end
+
     def option_with_params name
       result = {}
       if settings.send(name).is_a?(Proc)
         result = settings.send(name).call(params)
       else
-        if Rails::VERSION::MAJOR >= 4 && !forbidden_params_names?(name)
-          value = controller.send(name) rescue nil
-          result = value ? value : params[settings.send(name)]
+        if Rails::VERSION::MAJOR >= 4
+          value = params[settings.send(name)]
+          if name.to_s == "params_resource"
+            result = value.respond_to?(:permit) && resource_allow_permit? ? value.permit(*resource.permited_attributes) : value
+          else
+            result = value
+          end
         else
           result = params[settings.send(name)]
         end
       end
-      result = result && result.is_a?(Hash) ? result :  {}
+      result = result && result.is_a?(Hash) || name.to_s == "params_page" ? result :  {}
       result
     end
 
