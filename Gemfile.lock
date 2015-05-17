@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    resources (1.0.0)
+    resources (1.0.1)
       rails (>= 3.2, >= 3)
 
 GEM
@@ -125,7 +125,7 @@ GEM
       activemodel (~> 4.0)
     sprockets (3.0.3)
       rack (~> 1.0)
-    sprockets-rails (2.2.4)
+    sprockets-rails (2.3.1)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)

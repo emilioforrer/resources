@@ -48,14 +48,14 @@ module Resources
 
     def resource
       if grape?
-        @resource ||= params[:id].blank? ? build_resource : (resource_scope.where("#{resource_class.table_name}.id = ?",params[:id]).first rescue nil )
+        @resource ||= params[:id].blank? ? build_resource : (resource_scope.find(params[:id]) rescue nil )
       else
         @resource ||=
           case controller.action_name
           when "new", "create"
             build_resource
           else
-            resource_scope.where("#{resource_class.table_name}.id = ?",params[:id]).first rescue nil
+            resource_scope.find(params[:id]) rescue nil
           end
       end
     end

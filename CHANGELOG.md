@@ -1,6 +1,11 @@
 **CHANGE LOG**
 ===================
 
+v1.0.1
+
+* Changed the method to get a resource for `find` instead of an explicit `where` with the id, to make it more compatible with another gems like `FriendlyId`
+
+
 v1.0.0
 
 * New feature when using rails 4. You can add method called `permited_attributes` to your model to set the permited attributes of the `params_resource` options. This method most return an array.
