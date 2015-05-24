@@ -1,3 +1,5 @@
+require "responders"
+
 require "resources/actions"
 require "resources/rest_actions"
 require "resources/configuration"

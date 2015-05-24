@@ -20,4 +20,3 @@ gem 'kaminari'
 gem "ransack"
 gem "squeel"
 gem 'sqlite3'
-gem 'responders', '~> 2.0'

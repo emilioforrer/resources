@@ -21,10 +21,11 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency             "rails", '>= 3', '>= 3.2'
+  s.add_dependency "rails", '>= 3', '>= 3.2'
+  s.add_dependency "responders", '~> 2.0'
+
   s.add_development_dependency "factory_girl", '>= 3'
   s.add_development_dependency "database_cleaner", '~> 1.4', '>= 1.4.1'
   s.add_development_dependency "faker", '~> 1.4', '>= 1.4.3'
   s.add_development_dependency "rspec", '~> 3.2', '>= 3.2.0'
-
 end
