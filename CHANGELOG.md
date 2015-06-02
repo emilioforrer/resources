@@ -1,6 +1,12 @@
 **CHANGE LOG**
 ===================
 
+v2.0.0
+
+* Dropped support for rails version lower than 4.2
+* Version 1.x.x still support rails 3.2 to 4.1
+* Added dependency of responders
+
 v1.0.1
 
 * Changed the method to get a resource for `find` instead of an explicit `where` with the id, to make it more compatible with another gems like `FriendlyId`

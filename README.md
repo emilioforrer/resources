@@ -3,7 +3,7 @@
 
 It's a gem that help's you to create **CRUD** controllers for your models in a **very fast** and **flexible** way.
 
-**Note:** Version 1.0.0+ introduces some breaking changes, to see the list of this change please check [CHANGE_LOG.md](https://github.com/emilioforrer/resources/blob/master/CHANGELOG.md)
+**Note:** Version 2.0.0+ introduces some breaking changes, to see the list of this change please check [CHANGE_LOG.md](https://github.com/emilioforrer/resources/blob/master/CHANGELOG.md)
 
 ----------
 
@@ -336,6 +336,12 @@ Resources.config do |config|
 end
 ```
 
+----------
+
+
+## **Contributors**
+
+* **[dfreerksen](https://github.com/dfreerksen)**
 
 ----------
 
