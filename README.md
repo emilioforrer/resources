@@ -18,6 +18,7 @@ Add this line to your application's Gemfile:
 ```
 gem 'resources'
 ```
+*Note:* if you use rails 4 you need to add `gem 'responders'` before resources
 
 And then execute:
 
@@ -31,7 +32,7 @@ Or install it yourself as:
 $ gem install resources
 ```
 
-Rub the configuration generator, this will create the **resources initializer**
+Run the configuration generator, this will create the **resources initializer**
 
 ```
 rails g resources:install
@@ -84,7 +85,31 @@ And that's it, you have to do anything else on the controller to create a **CRUD
   = f.submit "SAVE"
 ```
 
+#### **FLASH -  `flash`**
 
+This options allows you to add a flash notice after saving or destroying a record.
+
+```
+class Admin::CountriesController < ApplicationController
+  resource_for :"Country", flash: true
+end
+```
+
+By default expects this locale: `"resources.#{controller_path}.#{action_name}"`.
+
+You can also pass a lambda to define a custom flash
+
+```
+class Admin::CountriesController < ApplicationController
+  resource_for :"Country", flash: -> (resource, params, controller) do
+    if  controller.action_name == "create"
+      I18n.t("flash.record_successfully_created")
+    else
+      I18n.t("flash.record_successfully_updated")
+    end  
+  end
+end
+```
 
 #### **RESOURCE PARAMS -  `params_resource`**
 

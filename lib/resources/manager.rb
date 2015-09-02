@@ -30,7 +30,7 @@ module Resources
     end
 
     def pagination?
-      settings.pagination.is_a?(Proc) ? settings.pagination.call(params, controller) : settings.pagination
+      settings.pagination.respond_to?(:call) ? settings.pagination.call(params, controller) : settings.pagination
     end
 
     def resource_scope
@@ -93,7 +93,7 @@ module Resources
       raise ArgumentError.new("The class '#{settings.resource_class_name}' does not exists. Please specify a valid model") if resource_class.nil?
       scope = Rails::VERSION::MAJOR >= 4 ? resource_class.all : resource_class.scoped
       if settings.send(name)
-        settings.send(name).is_a?(Proc) ? settings.send(name).call(scope,params,controller) : scope.send(settings.send(name))
+        settings.send(name).respond_to?(:call) ? settings.send(name).call(scope,params,controller) : scope.send(settings.send(name))
       else
         scope
       end
@@ -113,7 +113,7 @@ module Resources
 
     def option_with_params name
       result = {}
-      if settings.send(name).is_a?(Proc)
+      if settings.send(name).respond_to?(:call)
         result = settings.send(name).call(params)
       else
         if Rails::VERSION::MAJOR >= 4

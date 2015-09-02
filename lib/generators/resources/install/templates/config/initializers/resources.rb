@@ -2,6 +2,7 @@
 Resources.config do |config|
 
   config.rest_actions = true # Enable restful actions (index,new, create, etc)
+  config.flash = false # Show flash notice after save and destroy a record
   config.search = false # Enable ransack search object (resources_search)
   config.search_options =  {distinct: false} # ransack result options. Default {distinct: false}
 
@@ -26,5 +27,5 @@ Resources.config do |config|
   # country for the resource object
   # country_saved? to know if the resource was saved
   config.resource_method_name =  :resource # alias method of resource
-  config.resources_method_name =  :resources # alias method of resources, if you dont specify one it takes "resource_method_name.to_s.pluralize" 
+  config.resources_method_name =  :resources # alias method of resources, if you dont specify one it takes "resource_method_name.to_s.pluralize"
 end

@@ -66,6 +66,13 @@ module Resources
         if block_given?
           block.call(resource)
         else
+          if self.class.resource_configuration.flash && request.format.html?
+            if self.class.resource_configuration.flash.respond_to?(:call)
+              flash[:notice] = self.class.resource_configuration.flash.call(resource, params, self)
+            else
+              flash[:notice] = I18n.t("resources.#{controller_path}.#{action_name}")
+            end
+          end
           if self.respond_to?(after_redirect_for, true)
             respond_with resource, location: send(after_redirect_for)
           else
@@ -80,6 +87,13 @@ module Resources
         if block_given?
           block.call(@destroy_resource)
         else
+          if self.class.resource_configuration.flash && request.format.html?
+            if self.class.resource_configuration.flash.respond_to?(:call)
+              flash[:notice] = self.class.resource_configuration.flash.call(resource, params, self)
+            else
+              flash[:notice] = I18n.t("resources.#{controller_path}.#{action_name}")
+            end
+          end
           if self.respond_to?(after_redirect_for, true)
             respond_with resource, location: send(after_redirect_for), action: :destroy
           else
