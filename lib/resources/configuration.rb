@@ -2,7 +2,7 @@ module Resources
   class Configuration
 
     def self.accessors
-      [:rest_actions, :search, :search_options, :params_search, :resource_class_name, :resource_scope, :resources_scope, :resource_method_name, :resources_method_name, :params_resource, :pagination, :params_page]
+      [:rest_actions, :search, :search_options, :params_search, :resource_class_name, :resource_scope, :resources_scope, :resource_method_name, :resources_method_name, :params_resource, :pagination, :params_page, :flash]
     end
     accessors.map{|a| attr_accessor a }
 
@@ -10,6 +10,7 @@ module Resources
       options = args.extract_options!
       self.rest_actions = options[:rest_actions] || true
       self.search = options[:search] || false
+      self.flash = options[:flash] || false
       self.search_options = options[:search_options] && options[:search_options].is_a?(Hash) ? options[:search_options] : {distinct: false}
       self.params_search = options[:params_search] || :q
       self.params_resource = options[:params_resource] || :resource

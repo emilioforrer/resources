@@ -1,3 +1,4 @@
+%p= flash[:notice]
 = search_form_for [:admin, countries_search] do |f|
   = f.label :name_cont
   = f.search_field :name_cont

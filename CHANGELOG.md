@@ -1,6 +1,10 @@
 **CHANGE LOG**
 ===================
 
+v1.1.0
+
+* Added option to show flash messages
+
 v1.0.1
 
 * Changed the method to get a resource for `find` instead of an explicit `where` with the id, to make it more compatible with another gems like `FriendlyId`

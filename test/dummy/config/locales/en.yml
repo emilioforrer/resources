@@ -21,3 +21,6 @@
 
 en:
   hello: "Hello world"
+  resources:
+    admin/countries:
+      create: "country created!"
