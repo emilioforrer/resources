@@ -66,7 +66,7 @@ module Resources
         if block_given?
           block.call(resource)
         else
-          if self.class.resource_configuration.flash && request.format.html?
+          if self.class.resource_configuration.flash && request.format.html? && resource_saved?
             if self.class.resource_configuration.flash.respond_to?(:call)
               flash[:notice] = self.class.resource_configuration.flash.call(resource, params, self)
             else
