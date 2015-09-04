@@ -1,6 +1,10 @@
 **CHANGE LOG**
 ===================
 
+v1.1.1
+
+* Show flash messages only if the record was successfully saved
+
 v1.1.0
 
 * Added option to show flash messages

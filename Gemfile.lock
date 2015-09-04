@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    resources (1.1.0)
+    resources (1.1.1)
       rails (>= 3.2, >= 3)
 
 GEM
